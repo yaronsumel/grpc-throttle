@@ -54,7 +54,7 @@ func (s Semaphore) WaitForSlotAvailable(ctx context.Context) error {
 	return nil
 }
 
-// UnaryServerInterceptor returns a new unary server interceptors that performs per-request auth.
+// UnaryServerInterceptor returns a new unary server interceptors that performs per-request throttling.
 func UnaryServerInterceptor(fn ThrottleFunc) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		semaphore, ok := fn(info.FullMethod)
@@ -72,7 +72,7 @@ func UnaryServerInterceptor(fn ThrottleFunc) grpc.UnaryServerInterceptor {
 	}
 }
 
-// StreamServerInterceptor returns a new unary server interceptors that performs per-request auth.
+// StreamServerInterceptor returns a new unary server interceptors that performs per-request throttling.
 func StreamServerInterceptor(fn ThrottleFunc) grpc.StreamServerInterceptor {
 	return func(srv interface{}, stream grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
 		ctx := stream.Context()
