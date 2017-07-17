@@ -15,7 +15,7 @@ var sMap = throttle.SemaphoreMap{
 }
 ```
 
-create ThrottleFunc which returns Semaphore for method
+create ThrottleFunc which returns Semaphore for method.. or control it in any other way
 ```go
 
 func throttleFunc(fullMethod string) (throttle.Semaphore, bool) {
