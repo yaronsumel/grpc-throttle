@@ -1,5 +1,5 @@
 # grpc-throttle
-grpc-throttle interceptor for go-grpc-middleware
+grpc-throttle interceptor for go-grpc-middleware. inspired by [jbrandhorst](https://jbrandhorst.com/post/go-semaphore/)
 
 ## Get
 
