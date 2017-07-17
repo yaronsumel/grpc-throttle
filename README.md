@@ -9,28 +9,39 @@ grpc-throttle interceptor for go-grpc-middleware
 
 ##### Import 
 
+make SemaphoreMap with specific size per methods
+
+```go
+var sMap = throttle.SemaphoreMap{
+    "/authpb.Auth/Method": make(throttle.Semaphore, 1),
+}
+```
+
+create ThrottleFunc which returns Semaphore for method
 ```go
 
-    var sMap = throttle.SemaphoreMap{
-        "/authpb.Auth/Method": make(throttle.Semaphore, 1),
+func throttleFunc(fullMethod string) (throttle.Semaphore, bool) {
+    if s, ok := sMap[fullMethod]; ok {
+        return s, true
     }
-    
-    func TFunc(fullMethod string) (throttle.Semaphore, bool) {
-        if s, ok := sMap[fullMethod]; ok {
-            return s, true
-        }
-        return nil, false
-    }
+    return nil, false
+}
 
-	server := grpc.NewServer(
-		grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
-					// keep it last in the interceptor chain
-            throttle.StreamServerInterceptor
-		)),
-		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
-			// keep it last in the interceptor chain
-			throttle.UnaryServerInterceptor(TFunc),
-		)),
-	)
+```
+
+use it as interceptor
+
+```go
+
+server := grpc.NewServer(
+    grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
+        // keep it last in the interceptor chain
+        throttle.StreamServerInterceptor(throttleFunc)
+    )),
+        grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
+        // keep it last in the interceptor chain
+    throttle.UnaryServerInterceptor(throttleFunc),
+    )),
+)
 
 ```
