@@ -7,8 +7,6 @@ grpc-throttle interceptor for go-grpc-middleware. inspired by [jbrandhorst](http
 
 ## Usage
 
-##### Import 
-
 make SemaphoreMap with specific size per methods
 
 ```go
