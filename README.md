@@ -40,7 +40,7 @@ server := grpc.NewServer(
     )),
         grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
         // keep it last in the interceptor chain
-    throttle.UnaryServerInterceptor(throttleFunc),
+        throttle.UnaryServerInterceptor(throttleFunc),
     )),
 )
 
