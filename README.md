@@ -18,7 +18,7 @@ var sMap = throttle.SemaphoreMap{
 Create ThrottleFunc which returns Semaphore for method.. or control it in any other way
 ```go
 
-func throttleFunc(fullMethod string) (throttle.Semaphore, bool) {
+func ThrottleFunc(fullMethod string) (throttle.Semaphore, bool) {
     if s, ok := sMap[fullMethod]; ok {
         return s, true
     }
@@ -34,11 +34,11 @@ Use it as interceptor
 server := grpc.NewServer(
     grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
         // keep it last in the interceptor chain
-        throttle.StreamServerInterceptor(throttleFunc)
+        throttle.StreamServerInterceptor(ThrottleFunc)
     )),
         grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
         // keep it last in the interceptor chain
-        throttle.UnaryServerInterceptor(throttleFunc),
+        throttle.UnaryServerInterceptor(ThrottleFunc),
     )),
 )
 
