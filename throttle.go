@@ -29,7 +29,7 @@ import (
 )
 
 // ThrottleFunc will return Semaphore for each fullMethod string
-type ThrottleFunc func(fullMethod string) (Semaphore, bool)
+type ThrottleFunc func(ctx context.Context, fullMethod string) (Semaphore, bool)
 
 // SemaphoreMap its is map of FullMethod and Semaphore
 type SemaphoreMap map[string]chan struct{}
@@ -57,7 +57,7 @@ func (s Semaphore) WaitForSlotAvailable(ctx context.Context) error {
 // UnaryServerInterceptor returns a new unary server interceptors that performs per-request throttling.
 func UnaryServerInterceptor(fn ThrottleFunc) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-		semaphore, ok := fn(info.FullMethod)
+		semaphore, ok := fn(ctx, info.FullMethod)
 		if !ok {
 			goto next
 		}
@@ -76,7 +76,7 @@ func UnaryServerInterceptor(fn ThrottleFunc) grpc.UnaryServerInterceptor {
 func StreamServerInterceptor(fn ThrottleFunc) grpc.StreamServerInterceptor {
 	return func(srv interface{}, stream grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
 		ctx := stream.Context()
-		semaphore, ok := fn(info.FullMethod)
+		semaphore, ok := fn(ctx, info.FullMethod)
 		if !ok {
 			goto next
 		}

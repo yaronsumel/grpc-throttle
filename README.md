@@ -15,10 +15,10 @@ var sMap = throttle.SemaphoreMap{
 }
 ```
 
-Create ThrottleFunc which returns Semaphore for method.. or control it in any other way
+Create ThrottleFunc which returns Semaphore for method.. or control it in any other way using the the context
 ```go
 
-func throttleFunc(fullMethod string) (throttle.Semaphore, bool) {
+func throttleFunc(ctx context.Context,fullMethod string) (throttle.Semaphore, bool) {
     if s, ok := sMap[fullMethod]; ok {
         return s, true
     }
