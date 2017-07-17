@@ -7,7 +7,7 @@ grpc-throttle interceptor for go-grpc-middleware. inspired by [jbrandhorst](http
 
 ## Usage
 
-make SemaphoreMap with specific size per methods
+Make SemaphoreMap with specific size per methods
 
 ```go
 var sMap = throttle.SemaphoreMap{
@@ -15,7 +15,7 @@ var sMap = throttle.SemaphoreMap{
 }
 ```
 
-create ThrottleFunc which returns Semaphore for method.. or control it in any other way
+Create ThrottleFunc which returns Semaphore for method.. or control it in any other way
 ```go
 
 func throttleFunc(fullMethod string) (throttle.Semaphore, bool) {
@@ -27,7 +27,7 @@ func throttleFunc(fullMethod string) (throttle.Semaphore, bool) {
 
 ```
 
-use it as interceptor
+Use it as interceptor
 
 ```go
 
