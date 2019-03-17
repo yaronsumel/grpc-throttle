@@ -36,7 +36,7 @@ server := grpc.NewServer(
         // keep it last in the interceptor chain
         throttle.StreamServerInterceptor(ThrottleFunc)
     )),
-        grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
+    grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
         // keep it last in the interceptor chain
         throttle.UnaryServerInterceptor(ThrottleFunc),
     )),
